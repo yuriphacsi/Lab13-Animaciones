@@ -3,8 +3,7 @@ package com.phacsi.lab13animaciones
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,6 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Ejercicio2()
+                    Ejercicio3()
                 }
             }
         }
@@ -46,13 +46,16 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Ejercicio2() {
-    var isGreen by remember { mutableStateOf(false) }
+fun Ejercicio3() {
+    var expanded by remember { mutableStateOf(false) }
 
-    val color by animateColorAsState(
-        targetValue = if (isGreen) Color(0xFF4CAF50) else Color(0xFF2196F3),
-        animationSpec = tween(durationMillis = 800),
-        label = "colorAnimation"
+    val size by animateDpAsState(
+        targetValue = if (expanded) 200.dp else 100.dp,
+        label = "size"
+    )
+    val offsetX by animateDpAsState(
+        targetValue = if (expanded) 100.dp else 0.dp,
+        label = "offset"
     )
 
     Column(
@@ -60,21 +63,22 @@ fun Ejercicio2() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text("Ejercicio 2", style = MaterialTheme.typography.headlineSmall)
-        Text("Cambio de color", style = MaterialTheme.typography.bodyMedium)
+        Text("Ejercicio 3", style = MaterialTheme.typography.headlineSmall)
+        Text("Tamaño y posición", style = MaterialTheme.typography.bodyMedium)
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Box(
             modifier = Modifier
-                .size(150.dp)
-                .background(color, shape = RoundedCornerShape(12.dp))
+                .offset(x = offsetX)
+                .size(size)
+                .background(Color(0xFFFF9800), shape = RoundedCornerShape(12.dp))
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(40.dp))
 
-        Button(onClick = { isGreen = !isGreen }) {
-            Text("Cambiar color")
+        Button(onClick = { expanded = !expanded }) {
+            Text("Mover y cambiar tamaño")
         }
     }
 }
