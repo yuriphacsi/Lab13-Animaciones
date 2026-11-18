@@ -3,10 +3,8 @@ package com.phacsi.lab13animaciones
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -40,7 +38,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Ejercicio1()
+                    Ejercicio2()
                 }
             }
         }
@@ -48,38 +46,35 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Ejercicio1() {
-    var visible by remember { mutableStateOf(false) }
+fun Ejercicio2() {
+    var isGreen by remember { mutableStateOf(false) }
+
+    val color by animateColorAsState(
+        targetValue = if (isGreen) Color(0xFF4CAF50) else Color(0xFF2196F3),
+        animationSpec = tween(durationMillis = 800),
+        label = "colorAnimation"
+    )
 
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text("Ejercicio 1", style = MaterialTheme.typography.headlineSmall)
-        Text("Animación de visibilidad", style = MaterialTheme.typography.bodyMedium)
+        Text("Ejercicio 2", style = MaterialTheme.typography.headlineSmall)
+        Text("Cambio de color", style = MaterialTheme.typography.bodyMedium)
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Button(onClick = { visible = !visible }) {
-            Text(if (visible) "Ocultar cuadro" else "Mostrar cuadro")
-        }
+        Box(
+            modifier = Modifier
+                .size(150.dp)
+                .background(color, shape = RoundedCornerShape(12.dp))
+        )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
-        AnimatedVisibility(
-            visible = visible,
-            enter = fadeIn(animationSpec = tween(500)),
-            exit = fadeOut(animationSpec = tween(500))
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(150.dp)
-                    .background(Color(0xFF6B7A3A), shape = RoundedCornerShape(12.dp)),
-                contentAlignment = Alignment.Center
-            ) {
-                Text("¡Hola Compose!", color = Color.White)
-            }
+        Button(onClick = { isGreen = !isGreen }) {
+            Text("Cambiar color")
         }
     }
 }
